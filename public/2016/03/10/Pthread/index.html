@@ -1,0 +1,499 @@
+
+ <!DOCTYPE HTML>
+<html lang="zh-CN">
+<head>
+  <meta charset="UTF-8">
+  
+    <title>Linux多线程 | Teikayのblog</title>
+    <meta name="viewport" content="width=device-width, initial-scale=1,user-scalable=no">
+    
+    <meta name="author" content="Teikay">
+    
+
+    
+    <meta name="description" content="Linux环境多线程线程开发API多线程开发在Linux平台上的支持库是Pthread。其中设计的多线程开发的最基本的概念主要包含：线程操作，互斥锁，条件。线程操作主要包线程的创建，退出，等待三种。互斥锁包括四种操作，分别是创建，销毁，加锁和解锁。条件操作有5种操作：创建，销毁，触发，广播和等待。
+Linux Pthread API
+1234567891011121314151617线程操作：">
+<meta property="og:type" content="article">
+<meta property="og:title" content="Linux多线程">
+<meta property="og:url" content="http://teikay.me/2016/03/10/Pthread/index.html">
+<meta property="og:site_name" content="Teikayのblog">
+<meta property="og:description" content="Linux环境多线程线程开发API多线程开发在Linux平台上的支持库是Pthread。其中设计的多线程开发的最基本的概念主要包含：线程操作，互斥锁，条件。线程操作主要包线程的创建，退出，等待三种。互斥锁包括四种操作，分别是创建，销毁，加锁和解锁。条件操作有5种操作：创建，销毁，触发，广播和等待。
+Linux Pthread API
+1234567891011121314151617线程操作：">
+<meta property="og:updated_time" content="2016-03-10T15:30:19.000Z">
+<meta name="twitter:card" content="summary">
+<meta name="twitter:title" content="Linux多线程">
+<meta name="twitter:description" content="Linux环境多线程线程开发API多线程开发在Linux平台上的支持库是Pthread。其中设计的多线程开发的最基本的概念主要包含：线程操作，互斥锁，条件。线程操作主要包线程的创建，退出，等待三种。互斥锁包括四种操作，分别是创建，销毁，加锁和解锁。条件操作有5种操作：创建，销毁，触发，广播和等待。
+Linux Pthread API
+1234567891011121314151617线程操作：">
+
+    
+    <link rel="alternative" href="/atom.xml" title="Teikayのblog" type="application/atom+xml">
+    
+    
+    <link rel="icon" href="/img/favicon.ico">
+    
+    
+    <link rel="apple-touch-icon" href="/img/jacman.jpg">
+    <link rel="apple-touch-icon-precomposed" href="/img/jacman.jpg">
+    
+    <link rel="stylesheet" href="/css/style.css">
+</head>
+
+  <body>
+    <header>
+      
+<div>
+		
+			<div id="imglogo">
+				<a href="/"><img src="/img/logo.png" alt="Teikayのblog" title="Teikayのblog"/></a>
+			</div>
+			
+			<div id="textlogo">
+				<h1 class="site-name"><a href="/" title="Teikayのblog">Teikayのblog</a></h1>
+				<h2 class="blog-motto">Just do!</h2>
+			</div>
+			<div class="navbar"><a class="navbutton navmobile" href="#" title="菜单">
+			</a></div>
+			<nav class="animated">
+				<ul>
+					<ul>
+					 
+						<li><a href="/">Home</a></li>
+					
+						<li><a href="/archives">Archives</a></li>
+					
+						<li><a href="/about">About</a></li>
+					
+					<li>
+ 					
+					<form class="search" action="//google.com/search" method="get" accept-charset="utf-8">
+						<label>Search</label>
+						<input type="search" id="search" name="q" autocomplete="off" maxlength="20" placeholder="搜索" />
+						<input type="hidden" name="q" value="site:teikay.me">
+					</form>
+					
+					</li>
+				</ul>
+			</nav>			
+</div>
+    </header>
+    <div id="container">
+      <div id="main" class="post" itemscope itemprop="blogPost">
+  
+	<article itemprop="articleBody"> 
+		<header class="article-info clearfix">
+  <h1 itemprop="name">
+    
+      <a href="/2016/03/10/Pthread/" title="Linux多线程" itemprop="url">Linux多线程</a>
+  </h1>
+  <p class="article-author">By
+       
+		<a href="/about" title="Teikay" target="_blank" itemprop="author">Teikay</a>
+		
+  <p class="article-time">
+    <time datetime="2016-03-10T11:37:07.000Z" itemprop="datePublished"> 发表于 2016-03-10</time>
+    
+  </p>
+</header>
+	<div class="article-content">
+		
+		<div id="toc" class="toc-article">
+			<strong class="toc-title">文章目录</strong>
+		
+			<ol class="toc"><li class="toc-item toc-level-2"><a class="toc-link" href="#Linux环境多线程线程开发API"><span class="toc-number">1.</span> <span class="toc-text">Linux环境多线程线程开发API</span></a><ol class="toc-child"><li class="toc-item toc-level-3"><a class="toc-link" href="#线程操作"><span class="toc-number">1.1.</span> <span class="toc-text">线程操作</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#线程同步"><span class="toc-number">1.2.</span> <span class="toc-text">线程同步</span></a></li></ol></li><li class="toc-item toc-level-2"><a class="toc-link" href="#条件变量"><span class="toc-number">2.</span> <span class="toc-text">条件变量</span></a></li></ol>
+		
+		</div>
+		
+		<h2 id="Linux环境多线程线程开发API"><a href="#Linux环境多线程线程开发API" class="headerlink" title="Linux环境多线程线程开发API"></a>Linux环境多线程线程开发API</h2><p>多线程开发在Linux平台上的支持库是Pthread。其中设计的多线程开发的最基本的概念主要包含：线程操作，互斥锁，条件。线程操作主要包线程的创建，退出，等待三种。互斥锁包括四种操作，分别是创建，销毁，加锁和解锁。条件操作有5种操作：创建，销毁，触发，广播和等待。</p>
+<p><strong>Linux Pthread API</strong></p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br></pre></td><td class="code"><pre><span class="line">线程操作：  </span><br><span class="line">创建	pthread_create	</span><br><span class="line">退出	pthread_exit  </span><br><span class="line">等待	pthread_join	</span><br><span class="line"></span><br><span class="line">互斥锁:	</span><br><span class="line">创建	pthread_mutex_init	</span><br><span class="line">销毁	pthread_mutex_destroy	</span><br><span class="line">加锁	pthread_mutex_lock	</span><br><span class="line">解锁	pthread_mutex_unlock	</span><br><span class="line"></span><br><span class="line">条件变量:	</span><br><span class="line">创建	pthread_cond_init	</span><br><span class="line">销毁	pthread_cond_destroy	</span><br><span class="line">触发	pthread_cond_signal	  </span><br><span class="line">广播	pthread_cond_broadcast	S  </span><br><span class="line">等待	pthread_cond_wait / pthread_cond_timedwait</span><br></pre></td></tr></table></figure>
+<a id="more"></a>
+<h3 id="线程操作"><a href="#线程操作" class="headerlink" title="线程操作"></a>线程操作</h3><p><strong>线程操作example：</strong></p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br><span class="line">29</span><br><span class="line">30</span><br><span class="line">31</span><br><span class="line">32</span><br><span class="line">33</span><br><span class="line">34</span><br><span class="line">35</span><br><span class="line">36</span><br><span class="line">37</span><br><span class="line">38</span><br><span class="line">39</span><br><span class="line">40</span><br><span class="line">41</span><br><span class="line">42</span><br><span class="line">43</span><br><span class="line">44</span><br><span class="line">45</span><br><span class="line">46</span><br><span class="line">47</span><br><span class="line">48</span><br></pre></td><td class="code"><pre><span class="line"></span><br><span class="line">\# include &lt;stdio.h&gt;</span><br><span class="line">\# include &lt;stdlib.h&gt;</span><br><span class="line">\# include &lt;pthread.h&gt;</span><br><span class="line"></span><br><span class="line">void *</span><br><span class="line">thr_fn1(void *arg)</span><br><span class="line">&#123;</span><br><span class="line">    printf(&quot;thread 1 returning\n&quot;);</span><br><span class="line">    return((void *)1);</span><br><span class="line">&#125;</span><br><span class="line"></span><br><span class="line">void *</span><br><span class="line">thr_fn2(void *arg)</span><br><span class="line">&#123;</span><br><span class="line">    printf(&quot;thread 2 exiting\n&quot;);</span><br><span class="line">    pthread_exit((void *)2);</span><br><span class="line">&#125;</span><br><span class="line"></span><br><span class="line">int</span><br><span class="line">main(void)</span><br><span class="line">&#123;</span><br><span class="line">    int         err;</span><br><span class="line">    pthread_t   tid1, tid2;</span><br><span class="line">    void        *tret;</span><br><span class="line"></span><br><span class="line">    err = pthread_create(&amp;tid1, NULL, thr_fn1, NULL);</span><br><span class="line">    if (err != 0)</span><br><span class="line">        err_exit(err, &quot;can&apos;t create thread 1&quot;);</span><br><span class="line">    err = pthread_create(&amp;tid2, NULL, thr_fn2, NULL);</span><br><span class="line">    if (err != 0)</span><br><span class="line">        err_exit(err, &quot;can&apos;t create thread 2&quot;);</span><br><span class="line">    err = pthread_join(tid1, &amp;tret);</span><br><span class="line">    if (err != 0)</span><br><span class="line">        err_exit(err, &quot;can&apos;t join with thread 1&quot;);</span><br><span class="line">    printf(&quot;thread 1 exit code %ld\n&quot;, (long)tret);</span><br><span class="line">    err = pthread_join(tid2, &amp;tret);</span><br><span class="line">    if (err != 0)</span><br><span class="line">        err_exit(err, &quot;can&apos;t join with thread 2&quot;);</span><br><span class="line">    printf(&quot;thread 2 exit code %ld\n&quot;, (long)tret);</span><br><span class="line">    exit(0);</span><br><span class="line">&#125; </span><br><span class="line"></span><br><span class="line">执行结果：</span><br><span class="line">thread 1 turning</span><br><span class="line">thread 2 exiting</span><br><span class="line">thread 2 exit code 1</span><br><span class="line">thread 2 exit code 2</span><br></pre></td></tr></table></figure>
+<p>进程中的其它进程可以通过调用pthread_joi函数获得该线程的退出状态。当pthread_exit函数传递包含复杂信息的结构体的地址时，要注意这个结构所使用的内存在调用者完成调用以后仍是有效的。不能在线程的栈空间上分配该结构体，可以使用全局结构体或者用malloc函数分配空间。</p>
+<h3 id="线程同步"><a href="#线程同步" class="headerlink" title="线程同步"></a>线程同步</h3><p>当多个控制线程共享相同的内存时，需要确保每个线程看到一致的数据视图。当一个线程可以修改的变量，其它线程也可以读取或者修改的时候，就需要对这些线程进行同步，确保它们在访问变量的存储内容时不会访问到无效的值。</p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br><span class="line">29</span><br><span class="line">30</span><br><span class="line">31</span><br><span class="line">32</span><br><span class="line">33</span><br><span class="line">34</span><br><span class="line">35</span><br><span class="line">36</span><br><span class="line">37</span><br><span class="line">38</span><br><span class="line">39</span><br><span class="line">40</span><br><span class="line">41</span><br><span class="line">42</span><br><span class="line">43</span><br><span class="line">44</span><br><span class="line">45</span><br><span class="line">46</span><br><span class="line">47</span><br></pre></td><td class="code"><pre><span class="line">\#include &lt;stdlib.h&gt;</span><br><span class="line">\#include &lt;pthread.h&gt;</span><br><span class="line"></span><br><span class="line">struct foo &#123;</span><br><span class="line">    int             f_count;</span><br><span class="line">    pthread_mutex_t f_lock;</span><br><span class="line">    int             f_id;</span><br><span class="line">    /* ... more stuff here ... */</span><br><span class="line">&#125;;</span><br><span class="line"></span><br><span class="line">struct foo *</span><br><span class="line">foo_alloc(int id) /* allocate the object */</span><br><span class="line">&#123;</span><br><span class="line">    struct foo *fp;</span><br><span class="line"></span><br><span class="line">    if ((fp = malloc(sizeof(struct foo))) != NULL) &#123;</span><br><span class="line">        fp-&gt;f_count = 1;</span><br><span class="line">        fp-&gt;f_id = id;</span><br><span class="line">        if (pthread_mutex_init(&amp;fp-&gt;f_lock, NULL) != 0) &#123;</span><br><span class="line">            free(fp);</span><br><span class="line">            return(NULL);</span><br><span class="line">        &#125;</span><br><span class="line">        /* ... continue initialization ... */</span><br><span class="line">    &#125;</span><br><span class="line">    return(fp);</span><br><span class="line">&#125;</span><br><span class="line"></span><br><span class="line">void</span><br><span class="line">foo_hold(struct foo *fp) /* add a reference to the object */</span><br><span class="line">&#123;</span><br><span class="line">    pthread_mutex_lock(&amp;fp-&gt;f_lock);</span><br><span class="line">    fp-&gt;f_count++;</span><br><span class="line">    pthread_mutex_unlock(&amp;fp-&gt;f_lock);</span><br><span class="line">&#125;</span><br><span class="line"></span><br><span class="line">void</span><br><span class="line">foo_rele(struct foo *fp) /* release a reference to the object */</span><br><span class="line">&#123;</span><br><span class="line">    pthread_mutex_lock(&amp;fp-&gt;f_lock);</span><br><span class="line">    if (--fp-&gt;f_count == 0) &#123; /* last reference */</span><br><span class="line">        pthread_mutex_unlock(&amp;fp-&gt;f_lock);</span><br><span class="line">        pthread_mutex_destroy(&amp;fp-&gt;f_lock);</span><br><span class="line">        free(fp);</span><br><span class="line">    &#125; else &#123;</span><br><span class="line">        pthread_mutex_unlock(&amp;fp-&gt;f_lock);</span><br><span class="line">    &#125;</span><br><span class="line"> ｝</span><br></pre></td></tr></table></figure>
+<p>例子中用于保护某个数据的互斥量。当一个以上的线程需要访问动态分配的对象时，在对象中嵌入引入计数，确保在所有使用该对象的线程完成数据访问之前，该对象不会被释放。</p>
+<p>在对饮用计数加1，减1，检查引用计数是否达到0，这些操作之前需要锁住互斥量。使用该对象前，线程需要调用foo_hold对这个对象的引用计数加1.当对象使用完毕时，必须调用foo_rele释放引用。最后一个引用释放时，对象所占的内存空间就被释放。</p>
+<p>当存在多个互斥量时，为了避免死锁产生，可以通过控制互斥量的加锁顺序来避免死锁的发生。例如，假设需要对两个互斥量A和B同时加锁。如果所有线程总是对互斥量B加锁之前锁住互斥量A，那么使用这两个互斥量就不会产生死锁。</p>
+<h2 id="条件变量"><a href="#条件变量" class="headerlink" title="条件变量"></a>条件变量</h2><p>条件变量是线程可用的另一种同步机制。条件变量给多个线程提供了一个回合的场所。条件变量与互斥量一起使用，允许线程以无竞争的方式等待特定的条件发生。</p>
+<p>条件本身是由互斥量保护的。线程在改变条件状态之前必须首先锁住互斥量。传递给pthread_cond_wait的互斥量对条件进行了保护。调用者把锁住的互斥量传给函数，函数然后自动把调用线程放到等待条件列表上，对互斥量解锁。pthread_cond_wait返回时，互斥量会再次被锁住。</p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br><span class="line">29</span><br><span class="line">30</span><br><span class="line">31</span><br><span class="line">32</span><br><span class="line">33</span><br><span class="line">34</span><br><span class="line">35</span><br><span class="line">36</span><br><span class="line">37</span><br><span class="line">38</span><br><span class="line">39</span><br></pre></td><td class="code"><pre><span class="line"></span><br><span class="line">#include &lt;pthread.h&gt;</span><br><span class="line"></span><br><span class="line">struct msg &#123;</span><br><span class="line">    struct msg *m_next;</span><br><span class="line">    /* ... more stuff here ... */</span><br><span class="line">&#125;;</span><br><span class="line"></span><br><span class="line">struct msg *workq;</span><br><span class="line"></span><br><span class="line">pthread_cond_t qready = PTHREAD_COND_INITIALIZER;</span><br><span class="line"></span><br><span class="line">pthread_mutex_t qlock = PTHREAD_MUTEX_INITIALIZER;</span><br><span class="line"></span><br><span class="line">void</span><br><span class="line">process_msg(void)</span><br><span class="line">&#123;</span><br><span class="line">    struct msg *mp;</span><br><span class="line"></span><br><span class="line">    for (;;) &#123;</span><br><span class="line">        pthread_mutex_lock(&amp;qlock);</span><br><span class="line">        while (workq == NULL)</span><br><span class="line">            pthread_cond_wait(&amp;qready, &amp;qlock);</span><br><span class="line">        mp = workq;</span><br><span class="line">        workq = mp-&gt;m_next;</span><br><span class="line">        pthread_mutex_unlock(&amp;qlock);</span><br><span class="line">        /* now process the message mp */</span><br><span class="line">    &#125;</span><br><span class="line">&#125;</span><br><span class="line"></span><br><span class="line">void</span><br><span class="line">enqueue_msg(struct msg *mp)</span><br><span class="line">&#123;</span><br><span class="line">    pthread_mutex_lock(&amp;qlock);</span><br><span class="line">    mp-&gt;m_next = workq;</span><br><span class="line">    workq = mp;</span><br><span class="line">    pthread_mutex_unlock(&amp;qlock);</span><br><span class="line">    pthread_cond_signal(&amp;qready);</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+<p>条件是工作队列的状态。用互斥量保护条件，在while循环中判断条件。把消息放倒工作队列时需要占有互斥量，但在等待线程发信号时，不需要占有互斥量。只要线程在调用pthread_cond_signal之前把消息从队列中拖出了，就可以释放互斥量已完成这部分工作。</p>
+  
+	</div>
+		<footer class="article-footer clearfix">
+<div class="article-catetags">
+
+<div class="article-categories">
+  <span></span>
+  <a class="article-category-link" href="/categories/Linux/">Linux</a>
+</div>
+
+
+  <div class="article-tags">
+  
+  <span></span> <a href="/tags/多线程/">多线程</a>
+  </div>
+
+</div>
+
+
+
+	<div class="article-share" id="share">
+	
+	  <div data-url="http://teikay.me/2016/03/10/Pthread/" data-title="Linux多线程 | Teikayのblog" data-tsina="null" class="share clearfix">
+	  </div>
+	
+	</div>
+
+
+</footer>
+
+   	       
+	</article>
+	
+<nav class="article-nav clearfix">
+ 
+ <div class="prev" >
+ <a href="/2016/03/10/systype/" title="获取平台类型">
+  <strong>上一篇：</strong><br/>
+  <span>
+  获取平台类型</span>
+</a>
+</div>
+
+
+<div class="next">
+<a href="/2016/03/10/useNDK/"  title="使用NDK">
+ <strong>下一篇：</strong><br/> 
+ <span>使用NDK
+</span>
+</a>
+</div>
+
+</nav>
+
+	
+
+</div>  
+      <div class="openaside"><a class="navbutton" href="#" title="显示侧边栏"></a></div>
+
+  <div id="toc" class="toc-aside">
+  <strong class="toc-title">文章目录</strong>
+ 
+ <ol class="toc"><li class="toc-item toc-level-2"><a class="toc-link" href="#Linux环境多线程线程开发API"><span class="toc-number">1.</span> <span class="toc-text">Linux环境多线程线程开发API</span></a><ol class="toc-child"><li class="toc-item toc-level-3"><a class="toc-link" href="#线程操作"><span class="toc-number">1.1.</span> <span class="toc-text">线程操作</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#线程同步"><span class="toc-number">1.2.</span> <span class="toc-text">线程同步</span></a></li></ol></li><li class="toc-item toc-level-2"><a class="toc-link" href="#条件变量"><span class="toc-number">2.</span> <span class="toc-text">条件变量</span></a></li></ol>
+ 
+  </div>
+
+<div id="asidepart">
+<div class="closeaside"><a class="closebutton" href="#" title="隐藏侧边栏"></a></div>
+<aside class="clearfix">
+
+  
+
+
+  
+<div class="categorieslist">
+	<p class="asidetitle">分类</p>
+		<ul>
+		
+		  
+		
+		  
+			<li><a href="/categories/Linux/" title="Linux">Linux<sup>2</sup></a></li>
+		  
+		
+		  
+			<li><a href="/categories/NDK/" title="NDK">NDK<sup>2</sup></a></li>
+		  
+		
+		</ul>
+</div>
+
+
+  
+<div class="tagslist">
+	<p class="asidetitle">标签</p>
+		<ul class="clearfix">
+		
+			
+				<li><a href="/tags/多线程/" title="多线程">多线程<sup>1</sup></a></li>
+			
+		
+			
+				<li><a href="/tags/shell/" title="shell">shell<sup>1</sup></a></li>
+			
+		
+			
+				<li><a href="/tags/NDK/" title="NDK">NDK<sup>1</sup></a></li>
+			
+		
+			
+				<li><a href="/tags/JNI/" title="JNI">JNI<sup>1</sup></a></li>
+			
+		
+		</ul>
+</div>
+
+
+  <div class="linkslist">
+  <p class="asidetitle">友情链接</p>
+    <ul>
+        
+    </ul>
+</div>
+
+  
+
+
+  <div class="rsspart">
+	<a href="/atom.xml" target="_blank" title="rss">RSS 订阅</a>
+</div>
+
+  <div class="weiboshow">
+  <p class="asidetitle">新浪微博</p>
+    <iframe width="100%" height="119" class="share_self"  frameborder="0" scrolling="no" src="http://widget.weibo.com/weiboshow/index.php?language=&width=0&height=119&fansRow=2&ptype=1&speed=0&skin=9&isTitle=1&noborder=1&isWeibo=0&isFans=0&uid=null&verifier=&dpc=1"></iframe>
+</div>
+
+
+</aside>
+</div>
+    </div>
+    <footer><div id="footer" >
+	
+	<div class="line">
+		<span></span>
+		<div class="author"></div>
+	</div>
+	
+	
+	<section class="info">
+		<p> Hello ,Just do it!. <br/>
+			This is my blog,believe it or not.</p>
+	</section>
+	 
+	<div class="social-font" class="clearfix">
+		
+		
+		
+		
+		
+		
+		
+		
+		
+		
+	</div>
+			
+		
+
+		<p class="copyright">
+		Powered by <a href="http://hexo.io" target="_blank" title="hexo">hexo</a> and Theme by <a href="https://github.com/wuchong/jacman" target="_blank" title="Jacman">Jacman</a> © 2016 
+		
+		<a href="/about" target="_blank" title="Teikay">Teikay</a>
+		
+		
+		</p>
+</div>
+</footer>
+    <script src="/js/jquery-2.0.3.min.js"></script>
+<script src="/js/jquery.imagesloaded.min.js"></script>
+<script src="/js/gallery.js"></script>
+<script src="/js/jquery.qrcode-0.12.0.min.js"></script>
+
+<script type="text/javascript">
+$(document).ready(function(){ 
+  $('.navbar').click(function(){
+    $('header nav').toggleClass('shownav');
+  });
+  var myWidth = 0;
+  function getSize(){
+    if( typeof( window.innerWidth ) == 'number' ) {
+      myWidth = window.innerWidth;
+    } else if( document.documentElement && document.documentElement.clientWidth) {
+      myWidth = document.documentElement.clientWidth;
+    };
+  };
+  var m = $('#main'),
+      a = $('#asidepart'),
+      c = $('.closeaside'),
+      o = $('.openaside');
+  c.click(function(){
+    a.addClass('fadeOut').css('display', 'none');
+    o.css('display', 'block').addClass('fadeIn');
+    m.addClass('moveMain');
+  });
+  o.click(function(){
+    o.css('display', 'none').removeClass('beforeFadeIn');
+    a.css('display', 'block').removeClass('fadeOut').addClass('fadeIn');      
+    m.removeClass('moveMain');
+  });
+  $(window).scroll(function(){
+    o.css("top",Math.max(80,260-$(this).scrollTop()));
+  });
+  
+  $(window).resize(function(){
+    getSize(); 
+    if (myWidth >= 1024) {
+      $('header nav').removeClass('shownav');
+    }else{
+      m.removeClass('moveMain');
+      a.css('display', 'block').removeClass('fadeOut');
+      o.css('display', 'none');
+      
+      $('#toc.toc-aside').css('display', 'none');
+        
+    }
+  });
+});
+</script>
+
+<script type="text/javascript">
+$(document).ready(function(){ 
+  var ai = $('.article-content>iframe'),
+      ae = $('.article-content>embed'),
+      t  = $('#toc'),
+      ta = $('#toc.toc-aside'),
+      o  = $('.openaside'),
+      c  = $('.closeaside');
+  if(ai.length>0){
+    ai.wrap('<div class="video-container" />');
+  };
+  if(ae.length>0){
+   ae.wrap('<div class="video-container" />');
+  };
+  c.click(function(){
+    ta.css('display', 'block').addClass('fadeIn');
+  });
+  o.click(function(){
+    ta.css('display', 'none');
+  });
+  $(window).scroll(function(){
+    ta.css("top",Math.max(140,320-$(this).scrollTop()));
+  });
+});
+</script>
+
+
+<script type="text/javascript">
+$(document).ready(function(){ 
+  var $this = $('.share'),
+      url = $this.attr('data-url'),
+      encodedUrl = encodeURIComponent(url),
+      title = $this.attr('data-title'),
+      tsina = $this.attr('data-tsina'),
+      description = $this.attr('description');
+  var html = [
+  '<div class="hoverqrcode clearfix"></div>',
+  '<a class="overlay" id="qrcode"></a>',
+  '<a href="https://www.facebook.com/sharer.php?u=' + encodedUrl + '" class="article-share-facebook" target="_blank" title="Facebook"></a>',
+  '<a href="https://twitter.com/intent/tweet?url=' + encodedUrl + '" class="article-share-twitter" target="_blank" title="Twitter"></a>',
+  '<a href="#qrcode" class="article-share-qrcode" title="微信"></a>',
+  '<a href="http://widget.renren.com/dialog/share?resourceUrl=' + encodedUrl + '&srcUrl=' + encodedUrl + '&title=' + title +'" class="article-share-renren" target="_blank" title="人人"></a>',
+  '<a href="http://service.weibo.com/share/share.php?title='+title+'&url='+encodedUrl +'&ralateUid='+ tsina +'&searchPic=true&style=number' +'" class="article-share-weibo" target="_blank" title="微博"></a>',
+  '<span title="Share to"></span>'
+  ].join('');
+  $this.append(html);
+
+  $('.hoverqrcode').hide();
+
+  var myWidth = 0;
+  function updatehoverqrcode(){
+    if( typeof( window.innerWidth ) == 'number' ) {
+      myWidth = window.innerWidth;
+    } else if( document.documentElement && document.documentElement.clientWidth) {
+      myWidth = document.documentElement.clientWidth;
+    };
+    var qrsize = myWidth > 1024 ? 200:100;
+    var options = {render: 'image', size: qrsize, fill: '#2ca6cb', text: url, radius: 0.5, quiet: 1};
+    var p = $('.article-share-qrcode').position();
+    $('.hoverqrcode').empty().css('width', qrsize).css('height', qrsize)
+                          .css('left', p.left-qrsize/2+20).css('top', p.top-qrsize-10)
+                          .qrcode(options);
+  };
+  $(window).resize(function(){
+    $('.hoverqrcode').hide();
+  });
+  $('.article-share-qrcode').click(function(){
+    updatehoverqrcode();
+    $('.hoverqrcode').toggle();
+  });
+  $('.article-share-qrcode').hover(function(){}, function(){
+      $('.hoverqrcode').hide();
+  });
+});   
+</script>
+
+
+
+
+
+
+
+
+
+<link rel="stylesheet" href="/fancybox/jquery.fancybox.css" media="screen" type="text/css">
+<script src="/fancybox/jquery.fancybox.pack.js"></script>
+<script type="text/javascript">
+$(document).ready(function(){ 
+  $('.article-content').each(function(i){
+    $(this).find('img').each(function(){
+      if ($(this).parent().hasClass('fancybox')) return;
+      var alt = this.alt;
+      if (alt) $(this).after('<span class="caption">' + alt + '</span>');
+      $(this).wrap('<a href="' + this.src + '" title="' + alt + '" class="fancybox"></a>');
+    });
+    $(this).find('.fancybox').each(function(){
+      $(this).attr('rel', 'article' + i);
+    });
+  });
+  if($.fancybox){
+    $('.fancybox').fancybox();
+  }
+}); 
+</script>
+
+
+
+<!-- Analytics Begin -->
+
+
+
+<script>
+var _hmt = _hmt || [];
+(function() {
+  var hm = document.createElement("script");
+  hm.src = "//hm.baidu.com/hm.js?e6d1f421bbc9962127a50488f9ed37d1";
+  var s = document.getElementsByTagName("script")[0]; 
+  s.parentNode.insertBefore(hm, s);
+})();
+</script>
+
+
+
+<!-- Analytics End -->
+
+<!-- Totop Begin -->
+
+	<div id="totop">
+	<a title="返回顶部"><img src="/img/scrollup.png"/></a>
+	</div>
+	<script src="/js/totop.js"></script>
+
+<!-- Totop End -->
+
+<!-- MathJax Begin -->
+<!-- mathjax config similar to math.stackexchange -->
+
+
+<!-- MathJax End -->
+
+<!-- Tiny_search Begin -->
+
+<!-- Tiny_search End -->
+
+  </body>
+</html>

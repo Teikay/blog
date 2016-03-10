@@ -1,7 +1,7 @@
 ---
 title: 在 JNI 编程中避免内存泄漏
 date: 2016-03-09 23:53:05
-categories: JNI
+categories: NDK
 tags: JNI
 ---
 

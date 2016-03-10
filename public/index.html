@@ -81,6 +81,203 @@
         <header class="article-info clearfix">
   <h1 itemprop="name">
     
+      <a href="/2016/03/10/systype/" title="获取平台类型" itemprop="url">获取平台类型</a>
+  </h1>
+  <p class="article-author">By
+       
+		<a href="/about" title="Teikay" target="_blank" itemprop="author">Teikay</a>
+		
+  <p class="article-time">
+    <time datetime="2016-03-10T12:41:33.000Z" itemprop="datePublished"> 发表于 2016-03-10</time>
+    
+  </p>
+</header>
+    <div class="article-content">
+        
+        <p>获取系统平台的shell脚本：</p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br></pre></td><td class="code"><pre><span class="line"># (leading space required for Xenix /bin/sh)</span><br><span class="line">#</span><br><span class="line"># Determine the type of *ix operating system that we&apos;re</span><br><span class="line"># running on, and echo an appropriate value.</span><br><span class="line"># This script is intended to be used in Makefiles.</span><br><span class="line"># (This is a kludge.  Gotta be a better way.)</span><br><span class="line">#</span><br><span class="line">case `uname -s` in</span><br><span class="line">&quot;FreeBSD&quot;)</span><br><span class="line">    PLATFORM=&quot;freebsd&quot;</span><br><span class="line">    ;;</span><br><span class="line">&quot;Linux&quot;)</span><br><span class="line">    PLATFORM=&quot;linux&quot;</span><br><span class="line">    ;;</span><br><span class="line">&quot;Darwin&quot;)</span><br><span class="line">    PLATFORM=&quot;macos&quot;</span><br><span class="line">    ;;</span><br><span class="line">&quot;SunOS&quot;)</span><br><span class="line">    PLATFORM=&quot;solaris&quot;</span><br><span class="line">    ;;</span><br><span class="line">*)</span><br><span class="line">    echo &quot;Unknown platform&quot; &gt;&amp;2</span><br><span class="line">    exit 1</span><br><span class="line">esac</span><br><span class="line">echo $PLATFORM</span><br><span class="line">exit 0</span><br></pre></td></tr></table></figure>
+
+        
+        
+        <p class="article-more-link">
+          
+       </p>
+    </div>
+    <footer class="article-footer clearfix">
+<div class="article-catetags">
+
+<div class="article-categories">
+  <span></span>
+  <a class="article-category-link" href="/categories/Linux/">Linux</a>
+</div>
+
+
+  <div class="article-tags">
+  
+  <span></span> <a href="/tags/shell/">shell</a>
+  </div>
+
+</div>
+
+
+
+
+<div class="comments-count">
+	
+</div>
+
+</footer>
+
+
+    </article>
+
+
+
+
+
+
+   
+    
+    <article class="post-expand post" itemprop="articleBody"> 
+        <header class="article-info clearfix">
+  <h1 itemprop="name">
+    
+      <a href="/2016/03/10/Pthread/" title="Linux多线程" itemprop="url">Linux多线程</a>
+  </h1>
+  <p class="article-author">By
+       
+		<a href="/about" title="Teikay" target="_blank" itemprop="author">Teikay</a>
+		
+  <p class="article-time">
+    <time datetime="2016-03-10T11:37:07.000Z" itemprop="datePublished"> 发表于 2016-03-10</time>
+    
+  </p>
+</header>
+    <div class="article-content">
+        
+        <h2 id="Linux环境多线程线程开发API"><a href="#Linux环境多线程线程开发API" class="headerlink" title="Linux环境多线程线程开发API"></a>Linux环境多线程线程开发API</h2><p>多线程开发在Linux平台上的支持库是Pthread。其中设计的多线程开发的最基本的概念主要包含：线程操作，互斥锁，条件。线程操作主要包线程的创建，退出，等待三种。互斥锁包括四种操作，分别是创建，销毁，加锁和解锁。条件操作有5种操作：创建，销毁，触发，广播和等待。</p>
+<p><strong>Linux Pthread API</strong></p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br></pre></td><td class="code"><pre><span class="line">线程操作：  </span><br><span class="line">创建	pthread_create	</span><br><span class="line">退出	pthread_exit  </span><br><span class="line">等待	pthread_join	</span><br><span class="line"></span><br><span class="line">互斥锁:	</span><br><span class="line">创建	pthread_mutex_init	</span><br><span class="line">销毁	pthread_mutex_destroy	</span><br><span class="line">加锁	pthread_mutex_lock	</span><br><span class="line">解锁	pthread_mutex_unlock	</span><br><span class="line"></span><br><span class="line">条件变量:	</span><br><span class="line">创建	pthread_cond_init	</span><br><span class="line">销毁	pthread_cond_destroy	</span><br><span class="line">触发	pthread_cond_signal	  </span><br><span class="line">广播	pthread_cond_broadcast	S  </span><br><span class="line">等待	pthread_cond_wait / pthread_cond_timedwait</span><br></pre></td></tr></table></figure>
+        
+        
+        <p class="article-more-link">
+          
+            <a href="/2016/03/10/Pthread/#more">Read More</a>
+          
+       </p>
+    </div>
+    <footer class="article-footer clearfix">
+<div class="article-catetags">
+
+<div class="article-categories">
+  <span></span>
+  <a class="article-category-link" href="/categories/Linux/">Linux</a>
+</div>
+
+
+  <div class="article-tags">
+  
+  <span></span> <a href="/tags/多线程/">多线程</a>
+  </div>
+
+</div>
+
+
+
+
+<div class="comments-count">
+	
+</div>
+
+</footer>
+
+
+    </article>
+
+
+
+
+
+
+   
+    
+    <article class="post-expand post" itemprop="articleBody"> 
+        <header class="article-info clearfix">
+  <h1 itemprop="name">
+    
+      <a href="/2016/03/10/useNDK/" title="使用NDK" itemprop="url">使用NDK</a>
+  </h1>
+  <p class="article-author">By
+       
+		<a href="/about" title="Teikay" target="_blank" itemprop="author">Teikay</a>
+		
+  <p class="article-time">
+    <time datetime="2016-03-10T01:08:10.000Z" itemprop="datePublished"> 发表于 2016-03-10</time>
+    
+  </p>
+</header>
+    <div class="article-content">
+        
+        <h1 id="使用NDK"><a href="#使用NDK" class="headerlink" title="使用NDK"></a>使用NDK</h1><p>Android是基于Linux平台开发的开源手机操作系统,自然要对C、C++提供原生的支持。通过Google发布的Android手机NDK(Native Development Kit),应用程序可以非常方便地实现Java与C/C++代码的相互沟通。合理的使用NDK,可以提高应用程序的执行效率。</p>
+<hr>
+<h2 id="NDK开发环境"><a href="#NDK开发环境" class="headerlink" title="NDK开发环境"></a>NDK开发环境</h2><p>Android C/C++开发环境主要由一下几部分构成：</p>
+<ul>
+<li>Android软件开发包(Software Development Kit, SDK)</li>
+<li>Android原生开发包(Native Development Kit, NDK)</li>
+<li>Eclipse上的Android开发工具(Android Development Tools, ADT)插件</li>
+<li>Java开发包(Java Development Kit, JDK)</li>
+<li>Apache ANT构建系统</li>
+<li>GNU Make构建系统</li>
+<li>Eclipse IDE<br><em>将相应的目录添加到环境变量中去,能够让系统执行相应的命令</em><br><em>NDK的一些组件是shell脚本，这些脚本不能直接在Windows系统上执行。Windows平台上需要下载安装Cygwin</em></li>
+</ul>
+<hr>
+        
+        
+        <p class="article-more-link">
+          
+            <a href="/2016/03/10/useNDK/#more">Read More</a>
+          
+       </p>
+    </div>
+    <footer class="article-footer clearfix">
+<div class="article-catetags">
+
+<div class="article-categories">
+  <span></span>
+  <a class="article-category-link" href="/categories/NDK/">NDK</a>
+</div>
+
+
+  <div class="article-tags">
+  
+  <span></span> <a href="/tags/NDK/">NDK</a>
+  </div>
+
+</div>
+
+
+
+
+<div class="comments-count">
+	
+</div>
+
+</footer>
+
+
+    </article>
+
+
+
+
+
+
+   
+    
+    <article class="post-expand post" itemprop="articleBody"> 
+        <header class="article-info clearfix">
+  <h1 itemprop="name">
+    
       <a href="/2016/03/09/JNIMemory/" title="在 JNI 编程中避免内存泄漏" itemprop="url">在 JNI 编程中避免内存泄漏</a>
   </h1>
   <p class="article-author">By
@@ -114,7 +311,7 @@
 
 <div class="article-categories">
   <span></span>
-  <a class="article-category-link" href="/categories/JNI/">JNI</a>
+  <a class="article-category-link" href="/categories/NDK/">NDK</a>
 </div>
 
 
@@ -122,64 +319,6 @@
   
   <span></span> <a href="/tags/JNI/">JNI</a>
   </div>
-
-</div>
-
-
-
-
-<div class="comments-count">
-	
-</div>
-
-</footer>
-
-
-    </article>
-
-
-
-
-
-
-   
-    
-    <article class="post-expand post" itemprop="articleBody"> 
-        <header class="article-info clearfix">
-  <h1 itemprop="name">
-    
-      <a href="/2016/03/09/hello-world/" title="Hello World" itemprop="url">Hello World</a>
-  </h1>
-  <p class="article-author">By
-       
-		<a href="/about" title="Teikay" target="_blank" itemprop="author">Teikay</a>
-		
-  <p class="article-time">
-    <time datetime="2016-03-09T15:00:05.000Z" itemprop="datePublished"> 发表于 2016-03-09</time>
-    
-  </p>
-</header>
-    <div class="article-content">
-        
-        <p>Welcome to <a href="http://hexo.io/" target="_blank" rel="external">Hexo</a>! This is your very first post. Check <a href="http://hexo.io/docs/" target="_blank" rel="external">documentation</a> for more info. If you get any problems when using Hexo, you can find the answer in <a href="http://hexo.io/docs/troubleshooting.html" target="_blank" rel="external">troubleshooting</a> or you can ask me on <a href="https://github.com/hexojs/hexo/issues" target="_blank" rel="external">GitHub</a>.</p>
-<h2 id="Quick-Start"><a href="#Quick-Start" class="headerlink" title="Quick Start"></a>Quick Start</h2><h3 id="Create-a-new-post"><a href="#Create-a-new-post" class="headerlink" title="Create a new post"></a>Create a new post</h3><figure class="highlight bash"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">$ hexo new <span class="string">"My New Post"</span></span><br></pre></td></tr></table></figure>
-<p>More info: <a href="http://hexo.io/docs/writing.html" target="_blank" rel="external">Writing</a></p>
-<h3 id="Run-server"><a href="#Run-server" class="headerlink" title="Run server"></a>Run server</h3><figure class="highlight bash"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">$ hexo server</span><br></pre></td></tr></table></figure>
-<p>More info: <a href="http://hexo.io/docs/server.html" target="_blank" rel="external">Server</a></p>
-<h3 id="Generate-static-files"><a href="#Generate-static-files" class="headerlink" title="Generate static files"></a>Generate static files</h3><figure class="highlight bash"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">$ hexo generate</span><br></pre></td></tr></table></figure>
-<p>More info: <a href="http://hexo.io/docs/generating.html" target="_blank" rel="external">Generating</a></p>
-<h3 id="Deploy-to-remote-sites"><a href="#Deploy-to-remote-sites" class="headerlink" title="Deploy to remote sites"></a>Deploy to remote sites</h3><figure class="highlight bash"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">$ hexo deploy</span><br></pre></td></tr></table></figure>
-<p>More info: <a href="http://hexo.io/docs/deployment.html" target="_blank" rel="external">Deployment</a></p>
-
-        
-        
-        <p class="article-more-link">
-          
-       </p>
-    </div>
-    <footer class="article-footer clearfix">
-<div class="article-catetags">
-
 
 </div>
 
@@ -217,7 +356,13 @@
 		<ul>
 		
 		  
-			<li><a href="/categories/JNI/" title="JNI">JNI<sup>1</sup></a></li>
+		
+		  
+			<li><a href="/categories/Linux/" title="Linux">Linux<sup>2</sup></a></li>
+		  
+		
+		  
+			<li><a href="/categories/NDK/" title="NDK">NDK<sup>2</sup></a></li>
 		  
 		
 		</ul>
@@ -228,6 +373,18 @@
 <div class="tagslist">
 	<p class="asidetitle">标签</p>
 		<ul class="clearfix">
+		
+			
+				<li><a href="/tags/多线程/" title="多线程">多线程<sup>1</sup></a></li>
+			
+		
+			
+				<li><a href="/tags/shell/" title="shell">shell<sup>1</sup></a></li>
+			
+		
+			
+				<li><a href="/tags/NDK/" title="NDK">NDK<sup>1</sup></a></li>
+			
 		
 			
 				<li><a href="/tags/JNI/" title="JNI">JNI<sup>1</sup></a></li>
