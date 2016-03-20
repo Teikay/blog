@@ -4,26 +4,23 @@
 <head>
   <meta charset="UTF-8">
   
-    <title>获取平台类型 | Teikayのblog</title>
+    <title>生产者消费者模型 | Teikayのblog</title>
     <meta name="viewport" content="width=device-width, initial-scale=1,user-scalable=no">
     
     <meta name="author" content="Teikay">
     
 
     
-    <meta name="description" content="获取系统平台的shell脚本：
-1234567891011121314151617181920212223242526# (leading space required for Xenix /bin/sh)## Determine the type of *ix operating system that we&amp;apos;re# running on, and echo an appropriat">
+    <meta name="description" content="问题描述生产者消费者问题（英语：Producer-consumer problem），也称有限缓冲问题（英语：Bounded-buffer problem），是一个多线程同步问题的经典案例。该问题描述了两个共享固定大小缓冲区的线程——即所谓的“生产者”和“消费者”——在实际运行时会发生的问题。生产者的主要作用是生成一定量的数据放到缓冲区中，然后重复此过程。与此同时，消费者也在缓冲区消耗这些数据。该">
 <meta property="og:type" content="article">
-<meta property="og:title" content="获取平台类型">
-<meta property="og:url" content="http://teikay.me/2016/03/10/systype/index.html">
+<meta property="og:title" content="生产者消费者模型">
+<meta property="og:url" content="http://teikay.me/2016/03/20/producer-consumer/index.html">
 <meta property="og:site_name" content="Teikayのblog">
-<meta property="og:description" content="获取系统平台的shell脚本：
-1234567891011121314151617181920212223242526# (leading space required for Xenix /bin/sh)## Determine the type of *ix operating system that we&amp;apos;re# running on, and echo an appropriat">
-<meta property="og:updated_time" content="2016-03-10T15:27:38.000Z">
+<meta property="og:description" content="问题描述生产者消费者问题（英语：Producer-consumer problem），也称有限缓冲问题（英语：Bounded-buffer problem），是一个多线程同步问题的经典案例。该问题描述了两个共享固定大小缓冲区的线程——即所谓的“生产者”和“消费者”——在实际运行时会发生的问题。生产者的主要作用是生成一定量的数据放到缓冲区中，然后重复此过程。与此同时，消费者也在缓冲区消耗这些数据。该">
+<meta property="og:updated_time" content="2016-03-20T05:29:59.000Z">
 <meta name="twitter:card" content="summary">
-<meta name="twitter:title" content="获取平台类型">
-<meta name="twitter:description" content="获取系统平台的shell脚本：
-1234567891011121314151617181920212223242526# (leading space required for Xenix /bin/sh)## Determine the type of *ix operating system that we&amp;apos;re# running on, and echo an appropriat">
+<meta name="twitter:title" content="生产者消费者模型">
+<meta name="twitter:description" content="问题描述生产者消费者问题（英语：Producer-consumer problem），也称有限缓冲问题（英语：Bounded-buffer problem），是一个多线程同步问题的经典案例。该问题描述了两个共享固定大小缓冲区的线程——即所谓的“生产者”和“消费者”——在实际运行时会发生的问题。生产者的主要作用是生成一定量的数据放到缓冲区中，然后重复此过程。与此同时，消费者也在缓冲区消耗这些数据。该">
 
     
     <link rel="alternative" href="/atom.xml" title="Teikayのblog" type="application/atom+xml">
@@ -83,14 +80,14 @@
 		<header class="article-info clearfix">
   <h1 itemprop="name">
     
-      <a href="/2016/03/10/systype/" title="获取平台类型" itemprop="url">获取平台类型</a>
+      <a href="/2016/03/20/producer-consumer/" title="生产者消费者模型" itemprop="url">生产者消费者模型</a>
   </h1>
   <p class="article-author">By
        
 		<a href="/about" title="Teikay" target="_blank" itemprop="author">Teikay</a>
 		
   <p class="article-time">
-    <time datetime="2016-03-10T12:41:33.000Z" itemprop="datePublished"> 发表于 2016-03-10</time>
+    <time datetime="2016-03-20T04:04:13.000Z" itemprop="datePublished"> 发表于 2016-03-20</time>
     
   </p>
 </header>
@@ -99,12 +96,115 @@
 		<div id="toc" class="toc-article">
 			<strong class="toc-title">文章目录</strong>
 		
-			
+			<ol class="toc"><li class="toc-item toc-level-2"><a class="toc-link" href="#问题描述"><span class="toc-number">1.</span> <span class="toc-text">问题描述</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#问题解决方法"><span class="toc-number">2.</span> <span class="toc-text">问题解决方法</span></a></li></ol>
 		
 		</div>
 		
-		<p>获取系统平台的shell脚本：</p>
-<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br></pre></td><td class="code"><pre><span class="line"># (leading space required for Xenix /bin/sh)</span><br><span class="line">#</span><br><span class="line"># Determine the type of *ix operating system that we&apos;re</span><br><span class="line"># running on, and echo an appropriate value.</span><br><span class="line"># This script is intended to be used in Makefiles.</span><br><span class="line"># (This is a kludge.  Gotta be a better way.)</span><br><span class="line">#</span><br><span class="line">case `uname -s` in</span><br><span class="line">&quot;FreeBSD&quot;)</span><br><span class="line">    PLATFORM=&quot;freebsd&quot;</span><br><span class="line">    ;;</span><br><span class="line">&quot;Linux&quot;)</span><br><span class="line">    PLATFORM=&quot;linux&quot;</span><br><span class="line">    ;;</span><br><span class="line">&quot;Darwin&quot;)</span><br><span class="line">    PLATFORM=&quot;macos&quot;</span><br><span class="line">    ;;</span><br><span class="line">&quot;SunOS&quot;)</span><br><span class="line">    PLATFORM=&quot;solaris&quot;</span><br><span class="line">    ;;</span><br><span class="line">*)</span><br><span class="line">    echo &quot;Unknown platform&quot; &gt;&amp;2</span><br><span class="line">    exit 1</span><br><span class="line">esac</span><br><span class="line">echo $PLATFORM</span><br><span class="line">exit 0</span><br></pre></td></tr></table></figure>
+		<h2 id="问题描述"><a href="#问题描述" class="headerlink" title="问题描述"></a>问题描述</h2><p>生产者消费者问题（英语：Producer-consumer problem），也称有限缓冲问题（英语：Bounded-buffer problem），是一个多线程同步问题的经典案例。该问题描述了两个共享固定大小缓冲区的线程——即所谓的“生产者”和“消费者”——在实际运行时会发生的问题。生产者的主要作用是生成一定量的数据放到缓冲区中，然后重复此过程。与此同时，消费者也在缓冲区消耗这些数据。该问题的关键就是要保证生产者不会在缓冲区满时加入数据，消费者也不会在缓冲区中空时消耗数据。  </p>
+<p>要解决该问题，就必须让生产者在缓冲区满时休眠（要么干脆就放弃数据），等到下次消费者消耗缓冲区中的数据的时候，生产者才能被唤醒，开始往缓冲区添加数据。同样，也可以让消费者在缓冲区空时进入休眠，等到生产者往缓冲区添加数据之后，再唤醒消费者。</p>
+<a id="more"></a>
+<h2 id="问题解决方法"><a href="#问题解决方法" class="headerlink" title="问题解决方法"></a>问题解决方法</h2><p><strong> 线程条件变量：</strong> pthread_cond_t  </p>
+<p><strong> 线程等待某个条件：</strong><br>int pthread_cond_timedwait(pthread_cond_t <em>restrict cond,pthread_mutex_t </em>restrict mutex,const struct timespec <em>restrict abstime);<br>int pthread_cond_wait(pthread_cond_t </em>restrict cond,pthread_mutex_t *restrict mutex);    </p>
+<ul>
+<li>首先释放锁  </li>
+<li>等待，直到接收到signal  </li>
+<li>重新抢占锁  </li>
+</ul>
+<p><strong> 通知函数 </strong>  </p>
+<ul>
+<li>通知所有的线程：int pthread_cond_broadcast(pthread_cond_t *cond);   </li>
+<li>只通知一个线程：int pthread_cond_signal(pthread_cond_t *cond); </li>
+</ul>
+<p>代码示例：</p>
+<pre><code>#include &quot;queue.h&quot;
+#include &lt;pthread.h&gt;
+#include &lt;stdio.h&gt;
+#include &lt;stdlib.h&gt;
+#include &lt;unistd.h&gt;
+#define BUF_SIZE 3
+
+pthread_mutex_t mutex;    //  互斥锁 保护队列
+pthread_cond_t full;    //同步量  有产品可取
+pthread_cond_t empty;   //同步量 有空位可放
+Queue Q;
+
+void *producer(void* arg){
+    while(1){
+        pthread_mutex_lock(&amp;mutex);
+        while(Q.size_ == BUF_SIZE){
+            pthread_cond_wait(&amp;empty, &amp;mutex);
+        }
+        int data = rand()%100;
+        printf(&quot;produce a %d\n&quot;, data);
+        queue_push(&amp;Q, data);
+        pthread_cond_signal(&amp;full);
+        pthread_mutex_unlock(&amp;mutex);
+    }
+}
+
+void *consumer(void* arg){
+    while(1){
+        pthread_mutex_lock(&amp;mutex);
+        while(queue_is_empty(&amp;Q)){ 
+        //如果采用if判断条件的会产生消费者去空队列的情况，如果一个等待线程被激活，然后尚未拿到锁，
+        //另一个线程抢到锁，直接绕过if语句（此时队列不为空），然后将数据消费，此时队列为空。
+        //之前的线程拿到锁，继续消费导致错误。
+            printf(&quot;wait for producer\n&quot;);
+            pthread_cond_wait(&amp;full, &amp;mutex);
+        }
+        int data = queue_top(&amp;Q);
+        printf(&quot;consume a %d\n&quot;, data);
+        queue_pop(&amp;Q);
+        pthread_cond_signal(&amp;empty);
+        pthread_mutex_unlock(&amp;mutex);
+    }
+}
+
+int main(int argc, const char *argv[])
+{
+    srand(100000);
+    pthread_t tid1, tid2, tid3;
+    pthread_mutex_init(&amp;mutex, NULL);
+    pthread_cond_init(&amp;full, NULL);
+    pthread_cond_init(&amp;empty, NULL);
+    queue_init(&amp;Q);
+
+    pthread_create(&amp;tid3, NULL, producer, NULL);
+    pthread_create(&amp;tid1, NULL, consumer, NULL);
+    pthread_create(&amp;tid2, NULL, consumer, NULL);
+
+    queue_destroy(&amp;Q);
+    pthread_join(tid1, NULL);
+    pthread_join(tid2, NULL);
+    pthread_mutex_destroy(&amp;mutex);
+    pthread_cond_destroy(&amp;full);
+    pthread_cond_destroy(&amp;empty);
+    return 0;
+}
+</code></pre><p>pthread_cond_wait和pthread_cond_signal<br>关于其内部实现伪代码如下：</p>
+<pre><code>pthread_cond_wait(mutex, cond):
+    value = cond-&gt;value; /* 1 */
+    pthread_mutex_unlock(mutex); /* 2 */
+    pthread_mutex_lock(cond-&gt;mutex); /* 10 */    pthread_cond_t自带一个mutex来互斥对waiter等待链表的操作
+    if (value == cond-&gt;value) { /* 11 */    检查一次是不是cond有被其他线程设置过，相当于单例模式的第二次检测是否为NULL
+        me-&gt;next_cond = cond-&gt;waiter;
+        cond-&gt;waiter = me;//链表操作
+        pthread_mutex_unlock(cond-&gt;mutex);
+        unable_to_run(me);
+    } else
+        pthread_mutex_unlock(cond-&gt;mutex); /* 12 */
+    pthread_mutex_lock(mutex); /* 13 */    
+
+pthread_cond_signal(cond):
+    pthread_mutex_lock(cond-&gt;mutex); /* 3 */
+    cond-&gt;value++; /* 4 */
+    if (cond-&gt;waiter) { /* 5 */
+        sleeper = cond-&gt;waiter; /* 6 */
+        cond-&gt;waiter = sleeper-&gt;next_cond; /* 7 */        //链表操作
+        able_to_run(sleeper); /* 8 */    运行sleep的线程，即上面的me
+    }
+    pthread_mutex_unlock(cond-&gt;mutex); /* 9 */
+</code></pre><p> 以上</p>
   
 	</div>
 		<footer class="article-footer clearfix">
@@ -118,7 +218,7 @@
 
   <div class="article-tags">
   
-  <span></span> <a href="/tags/shell/">shell</a>
+  <span></span> <a href="/tags/多线程/">多线程</a>
   </div>
 
 </div>
@@ -127,7 +227,7 @@
 
 	<div class="article-share" id="share">
 	
-	  <div data-url="http://teikay.me/2016/03/10/systype/" data-title="获取平台类型 | Teikayのblog" data-tsina="null" class="share clearfix">
+	  <div data-url="http://teikay.me/2016/03/20/producer-consumer/" data-title="生产者消费者模型 | Teikayのblog" data-tsina="null" class="share clearfix">
 	  </div>
 	
 	</div>
@@ -140,19 +240,11 @@
 	
 <nav class="article-nav clearfix">
  
- <div class="prev" >
- <a href="/2016/03/20/producer-consumer/" title="生产者消费者模型">
-  <strong>上一篇：</strong><br/>
-  <span>
-  生产者消费者模型</span>
-</a>
-</div>
-
 
 <div class="next">
-<a href="/2016/03/10/Pthread/"  title="Linux多线程">
+<a href="/2016/03/10/systype/"  title="获取平台类型">
  <strong>下一篇：</strong><br/> 
- <span>Linux多线程
+ <span>获取平台类型
 </span>
 </a>
 </div>
@@ -167,7 +259,7 @@
   <div id="toc" class="toc-aside">
   <strong class="toc-title">文章目录</strong>
  
- 
+ <ol class="toc"><li class="toc-item toc-level-2"><a class="toc-link" href="#问题描述"><span class="toc-number">1.</span> <span class="toc-text">问题描述</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#问题解决方法"><span class="toc-number">2.</span> <span class="toc-text">问题解决方法</span></a></li></ol>
  
   </div>
 

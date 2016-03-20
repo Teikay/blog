@@ -81,6 +81,68 @@
         <header class="article-info clearfix">
   <h1 itemprop="name">
     
+      <a href="/2016/03/20/producer-consumer/" title="生产者消费者模型" itemprop="url">生产者消费者模型</a>
+  </h1>
+  <p class="article-author">By
+       
+		<a href="/about" title="Teikay" target="_blank" itemprop="author">Teikay</a>
+		
+  <p class="article-time">
+    <time datetime="2016-03-20T04:04:13.000Z" itemprop="datePublished"> 发表于 2016-03-20</time>
+    
+  </p>
+</header>
+    <div class="article-content">
+        
+        <h2 id="问题描述"><a href="#问题描述" class="headerlink" title="问题描述"></a>问题描述</h2><p>生产者消费者问题（英语：Producer-consumer problem），也称有限缓冲问题（英语：Bounded-buffer problem），是一个多线程同步问题的经典案例。该问题描述了两个共享固定大小缓冲区的线程——即所谓的“生产者”和“消费者”——在实际运行时会发生的问题。生产者的主要作用是生成一定量的数据放到缓冲区中，然后重复此过程。与此同时，消费者也在缓冲区消耗这些数据。该问题的关键就是要保证生产者不会在缓冲区满时加入数据，消费者也不会在缓冲区中空时消耗数据。  </p>
+<p>要解决该问题，就必须让生产者在缓冲区满时休眠（要么干脆就放弃数据），等到下次消费者消耗缓冲区中的数据的时候，生产者才能被唤醒，开始往缓冲区添加数据。同样，也可以让消费者在缓冲区空时进入休眠，等到生产者往缓冲区添加数据之后，再唤醒消费者。</p>
+        
+        
+        <p class="article-more-link">
+          
+            <a href="/2016/03/20/producer-consumer/#more">Read More</a>
+          
+       </p>
+    </div>
+    <footer class="article-footer clearfix">
+<div class="article-catetags">
+
+<div class="article-categories">
+  <span></span>
+  <a class="article-category-link" href="/categories/Linux/">Linux</a>
+</div>
+
+
+  <div class="article-tags">
+  
+  <span></span> <a href="/tags/多线程/">多线程</a>
+  </div>
+
+</div>
+
+
+
+
+<div class="comments-count">
+	
+</div>
+
+</footer>
+
+
+    </article>
+
+
+
+
+
+
+   
+    
+    <article class="post-expand post" itemprop="articleBody"> 
+        <header class="article-info clearfix">
+  <h1 itemprop="name">
+    
       <a href="/2016/03/10/systype/" title="获取平台类型" itemprop="url">获取平台类型</a>
   </h1>
   <p class="article-author">By
@@ -356,9 +418,7 @@
 		<ul>
 		
 		  
-		
-		  
-			<li><a href="/categories/Linux/" title="Linux">Linux<sup>2</sup></a></li>
+			<li><a href="/categories/Linux/" title="Linux">Linux<sup>3</sup></a></li>
 		  
 		
 		  
@@ -375,7 +435,11 @@
 		<ul class="clearfix">
 		
 			
-				<li><a href="/tags/多线程/" title="多线程">多线程<sup>1</sup></a></li>
+				<li><a href="/tags/多线程/" title="多线程">多线程<sup>2</sup></a></li>
+			
+		
+			
+				<li><a href="/tags/JNI/" title="JNI">JNI<sup>1</sup></a></li>
 			
 		
 			
@@ -384,10 +448,6 @@
 		
 			
 				<li><a href="/tags/NDK/" title="NDK">NDK<sup>1</sup></a></li>
-			
-		
-			
-				<li><a href="/tags/JNI/" title="JNI">JNI<sup>1</sup></a></li>
 			
 		
 		</ul>
